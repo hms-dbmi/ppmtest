@@ -1,0 +1,37 @@
+accounts:
+  docker:
+    admin:
+      email: admin@ppm.com
+      password: PPMIsGreat!
+
+    facebook:
+      email: qpovtabbjz_1522326124@tfbnw.net
+      password: ppmisgreat
+
+    fitbit:
+      email: qpovtabbjz_1522326124@tfbnw.net
+      password: ppmisgreat
+  local:
+    admin:
+      email: admin@ppm.com
+      password: PPMIsGreat!
+
+    facebook:
+      email: qpovtabbjz_1522326124@tfbnw.net
+      password: ppmisgreat
+
+    fitbit:
+      email: qpovtabbjz_1522326124@tfbnw.net
+      password: ppmisgreat
+  ppm:
+    admin:
+      email: admin@ppm.com
+      password: PPMIsGreat!
+
+    facebook:
+      email: qpovtabbjz_1522326124@tfbnw.net
+      password: ppmisgreat
+
+    fitbit:
+      email: qpovtabbjz_1522326124@tfbnw.net
+      password: ppmisgreat

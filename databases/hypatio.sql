@@ -1,0 +1,4 @@
+CREATE USER 'hypatio'@'%' IDENTIFIED BY 'Q9ID8!2nkljadb@n5AEW9V';
+CREATE DATABASE hypatio;
+GRANT ALL PRIVILEGES ON hypatio.* TO 'hypatio'@'%';
+FLUSH PRIVILEGES;

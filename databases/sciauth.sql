@@ -1,0 +1,4 @@
+CREATE USER 'sciauth'@'%' IDENTIFIED BY 'Q9ID8!2nkljadb@n5AEW9V';
+CREATE DATABASE sciauth;
+GRANT ALL PRIVILEGES ON sciauth.* TO 'sciauth'@'%';
+FLUSH PRIVILEGES;

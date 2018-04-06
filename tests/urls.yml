@@ -1,0 +1,43 @@
+urls:
+  docker:
+    selenium: http://hub:4444/wd/hub
+    p2m2: https://p2m2.aws.dbmi-dev.hms.harvard.edu?project=
+    dashboard: https://p2m2.aws.dbmi-dev.hms.harvard.edu/dashboard/dashboard
+    profile: https://p2m2.aws.dbmi-dev.hms.harvard.edu/dashboard/profile
+    p2m2-admin: https://p2m2a.aws.dbmi-dev.hms.harvard.edu:8011/participants/
+    sciauth: https://authentication.aws.dbmi-dev.hms.harvard.edu
+    scireg: https://authentication.aws.dbmi-dev.hms.harvard.edu
+    inbox: http://email.inbox.com:8025
+    fhir: http://ppm-test-fhir.aws.dbmi.hms.harvard.edu:8008/baseDstu3
+    questionnaire: http://questionnaire.aws.dbmi-dev.hms.harvard.edu:8001
+    consent: http://consent.aws.dbmi-dev.hms.harvard.edu:8003
+    questionnaire-neer: http://questionnaire-neer.aws.dbmi-dev.hms.harvard.edu:8007
+    consent-neer: http://consent-neer.aws.dbmi-dev.hms.harvard.edu:8009
+  local:
+    selenium: http://127.0.0.1:4444/wd/hub
+    p2m2: https://p2m2.aws.dbmi-dev.hms.harvard.edu?project=
+    dashboard: https://p2m2.aws.dbmi-dev.hms.harvard.edu/dashboard/dashboard
+    profile: https://p2m2.aws.dbmi-dev.hms.harvard.edu/dashboard/profile
+    p2m2-admin: https://p2m2a.aws.dbmi-dev.hms.harvard.edu:8011/participants/
+    sciauth: https://authentication.aws.dbmi-dev.hms.harvard.edu
+    scireg: https://authentication.aws.dbmi-dev.hms.harvard.edu
+    inbox: http://email.inbox.com:8025
+    fhir: http://localhost:9001/baseDstu3
+    questionnaire: http://questionnaire.aws.dbmi-dev.hms.harvard.edu:8001
+    consent: http://consent.aws.dbmi-dev.hms.harvard.edu:8003
+    questionnaire-neer: http://questionnaire-neer.aws.dbmi-dev.hms.harvard.edu:8007
+    consent-neer: http://consent-neer.aws.dbmi-dev.hms.harvard.edu:8009
+  ppm:
+    selenium: http://127.0.0.1:4444/wd/hub
+    p2m2: http://localhost:8010?project=
+    dashboard: http://localhost:8010/dashboard/dashboard
+    profile: http://localhost:8010/dashboard/profile
+    p2m2-admin: http://localhost:8011/participants/
+    sciauth: http://localhost:8001
+    scireg: http://localhost:8005
+    inbox: http://localhost:8018
+    fhir: http://localhost:8008/baseDstu3
+    questionnaire: http://localhost:8004
+    consent: http://localhost:8003
+    questionnaire-neer: http://localhost:8007
+    consent-neer: http://localhost:8009
