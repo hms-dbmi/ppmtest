@@ -845,6 +845,8 @@ class AutismUser(_User):
             # Continue.
             form.find_by_text('Continue').first.click()
 
+            time.sleep(2)
+
             # Ensure the field has loaded.
             if not browser.make_element_visible_by_tag('form', wait_time):
                 logger.error('Consent signature form could not be found')
