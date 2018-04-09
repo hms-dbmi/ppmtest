@@ -21,7 +21,7 @@ mkdir -p "./$today"
 mkdir -p videos
 
 # Run the stack and get exit code from tests (videos not exporting)
-docker-compose up --exit-code-from test --abort-on-container-exit &>"$today/test-output-$today.log"
+docker-compose up --exit-code-from test --abort-on-container-exit  2>&1 | tee "$today/test-output-$today.log"
 RESULT=$?
 
 if [ $RESULT -ne 0 ]; then
