@@ -337,6 +337,7 @@ services:
     environment:
       - PPM_TEST_TEST
       - PPM_TEST_ENVIRONMENT=docker
+    entrypoint: /test-entrypoint.sh
     command: nose2 -s tests $PPM_TEST_TEST
     depends_on:
       p2m2:
