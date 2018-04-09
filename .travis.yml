@@ -1,0 +1,20 @@
+sudo: required
+
+language: python
+
+services:
+  - docker
+
+env:
+  - PPM_TEST_S3_BUCKET=dbmi-ppm-test-output
+  - PPM_TEST_OUTPUT_PATH=/ppm-test-output.tar.gz
+  - PPM_TEST_TEST=test.PPMTestCase.test_neer_chrome
+
+install:
+  - setup.sh
+
+script:
+  - test.sh
+
+after_failure:
+  - upload.sh

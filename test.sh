@@ -32,6 +32,9 @@ if [ $RESULT -ne 0 ]; then
     docker-compose logs -t > "$today/test-logs-$today.log"
     find videos -name "*.mp4" -exec mv "{}" "$today" \;
 
+    # Tar the output directory
+    tar czf "$PPM_TEST_OUTPUT_PATH" "$today"
+
 else
 
     echo "Tests succeeded!"
