@@ -31,10 +31,3 @@ fi
 
 # Ensure we have the Selenium image
 docker pull elgalu/selenium
-
-# Get the latest and greatest
-docker-compose pull --parallel
-
-# Ensure the stack is not already running
-docker-compose down -v --remove-orphans
-docker-compose rm -v -f -s

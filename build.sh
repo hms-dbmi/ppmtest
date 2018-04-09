@@ -4,27 +4,45 @@
 if [ -z ${1+x} ]; then
   exit 0
 else
+    # Determine where app sources are located
+    APPS_DIR=${PPM_APPS_DIR:-"./appsz/"}
+
     cat > ./docker-compose.override.yml <<EOL
 version: '2.1'
 services:
 EOL
     for i in $(echo $1 | sed "s/,/ /g")
     do
-        # call your procedure/other scripts here below
-        echo "$i"
 
-        # Set the image name
-        IMAGE="ppmtest/$i:test"
+        # Make sure the source exists
+        CONTEXT="$APPS_DIR/$i"
+        if [ ! -f "$CONTEXT" ]; then
+            echo "$i - App source directory does not exist: $CONTEXT" >&2
+        else
 
-        # Replace its image
-        echo "Building $i -> $IMAGE"
+            # Set the image name
+            IMAGE="ppmtest/$i:test"
 
-        # Build the image
-        docker build -t "$IMAGE" ./apps/$i
+            # Replace its image
+            echo "Building $i -> $IMAGE"
 
-        cat >> ./docker-compose.override.yml <<EOL
+            # Build it
+            docker build -t "$IMAGE" "$CONTEXT"
+
+            # Append the override
+            cat >> ./docker-compose.override.yml <<EOL
   $i:
     image: $IMAGE
 EOL
-  done
+        fi
+    done
+fi
+
+# Ensure override is not empty
+if [[ $(wc -l <./docker-compose.override.yml) -lt 4 ]]; then
+
+    # Remove it
+    echo "No apps were build, removing docker-compose.override.yml" >&2
+    rm ./docker-compose.override.yml
+
 fi

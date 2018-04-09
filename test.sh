@@ -3,6 +3,13 @@
 # Check for a specific test
 export PPM_TEST_TEST="$1"
 
+# Get the latest and greatest
+docker-compose pull --parallel
+
+# Ensure the stack is not already running
+docker-compose down -v --remove-orphans
+docker-compose rm -v -f -s
+
 # Output link to monitoring
 echo "Follow tests at: http://localhost:4444/grid/admin/live#"
 
