@@ -7,14 +7,15 @@ services:
 
 env:
   - PPM_TEST_S3_BUCKET=dbmi-ppm-test-output
-  - PPM_TEST_OUTPUT_PATH=/ppm-test-output.tar.gz
+  - PPM_TEST_OUTPUT_PATH=$TRAVIS_BUILD_DIR/ppm-test-output.tar.gz
   - PPM_TEST_TEST=test.PPMTestCase.test_neer_chrome
 
 install:
-  - setup.sh
+  - cd $TRAVIS_BUILD_DIR
+  - ./setup.sh
 
 script:
-  - test.sh
+  - ./test.sh
 
 after_failure:
-  - upload.sh
+  - ./upload.sh

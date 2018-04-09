@@ -5,7 +5,7 @@ if [ -z ${1+x} ]; then
   exit 0
 else
     # Determine where app sources are located
-    APPS_DIR=${PPM_APPS_DIR:-"./appsz/"}
+    APPS_DIR=${PPM_APPS_DIR:-"./apps/"}
 
     cat > ./docker-compose.override.yml <<EOL
 version: '2.1'
