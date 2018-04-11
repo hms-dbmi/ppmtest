@@ -3,6 +3,9 @@
 # Check for a specific test
 export PPM_TEST_TEST="$1"
 
+# Get the output archive path
+OUTPUT_PATH=${PPM_TEST_OUTPUT_PATH:-"ppm-test-output.tar.gz"}
+
 # Get the latest and greatest
 docker-compose pull --parallel
 
@@ -22,7 +25,7 @@ mkdir -p videos
 
 # Run the stack and get exit code from tests (videos not exporting)
 docker-compose up --exit-code-from test --abort-on-container-exit  2>&1 | tee "$today/test-output-$today.log"
-RESULT=$?
+RESULT=${PIPESTATUS[0]}
 
 if [ $RESULT -ne 0 ]; then
 
@@ -33,20 +36,12 @@ if [ $RESULT -ne 0 ]; then
     find videos -name "*.mp4" -exec mv "{}" "$today" \;
 
     # Tar the output directory
-    tar czf "$PPM_TEST_OUTPUT_PATH" "$today"
+    tar czf "$OUTPUT_PATH" "$today"
 
 else
 
     echo "Tests succeeded!"
 
-    # Clean up files
-    rm -rf videos
-    rm -rf "$today"
-
 fi
-
-# Clean up
-docker-compose down -v --remove-orphans
-docker-compose rm -v -f -s
 
 exit $RESULT
