@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get the file or quit
-FILE_TO_UPLOAD=${PPM_TEST_OUTPUT_PATH:-"/ppm-test-output.tar.gz"}
+FILE_TO_UPLOAD=${PPM_TEST_OUTPUT_PATH:-"ppm-test-output.tar.gz"}
 if [[ ! -f ./ppm-test-output.tar.gz ]]; then
     echo "No output archive to upload!" >&2
     exit 0

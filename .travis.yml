@@ -15,7 +15,7 @@ install:
   - ./setup.sh
 
 script:
-  - ./test.sh
+  - ./test.sh test.PPMTestCase.test_neer_chrome
 
 after_failure:
   - ./upload.sh
