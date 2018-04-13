@@ -2,13 +2,15 @@ pipeline {
     agent any
     parameters {
         text(
-            defaultValue: '',
+            defaultValue: 'test.PPMTestCase.test_neer_firefox',
             description: 'The tests to run against the stack',
-            name: 'PPM_TEST_TEST')
-        text(
-            defaultValue: 'artifacts',
-            description: 'The directory to collect output artifacts in',
-            name: 'PPM_TEST_ARTIFACTS')
+            name: 'test')
+    }
+
+    environment {
+        PPM_TEST_STACK = '${JOB_NAME}-${BUILD_ID}'
+        PPM_TEST_ARTIFACTS = 'artifacts'
+        PPM_TEST_TEST = '${ params.test }'
     }
 
     stages {
@@ -26,7 +28,7 @@ pipeline {
 
         stage ('Test') {
             steps {
-                sh("./test.sh ${ params.PPM_TEST_TEST } ${JOB_NAME}-${BUILD_ID} ${ params.PPM_TEST_ARTIFACTS }")
+                sh("./test.sh ${ params.test }")
             }
         }
     }
@@ -34,7 +36,7 @@ pipeline {
     post {
         always {
             // Collect logs and such
-            archiveArtifacts artifacts: '${ params.PPM_TEST_ARTIFACTS }/*', fingerprint: true
+            archiveArtifacts artifacts: '${PPM_TEST_ARTIFACTS}/*', fingerprint: true
 
             // Clean up Docker and stack
             sh("docker-compose -p ${JOB_NAME}-${BUILD_ID} down -v --remove-orphans")

@@ -4,14 +4,14 @@
 export PPM_TEST_TEST="$1"
 
 # Get the output archive path
-ARTIFACTS_PATH=${3:-artifacts}
+ARTIFACTS_PATH=${PPM_TEST_ARTIFACTS:-artifacts}
 
 # RGet the current date and create a directory for collecting logs
 today=`date +%Y%m%d_%H%M%S`
 mkdir -p "./$ARTIFACTS_PATH"
 
 # Determine what to call the stack
-PPM_PROJECT_NAME=${2:-$today}
+PPM_PROJECT_NAME=${PPM_TEST_STACK:-$today}
 
 # Get the latest and greatest
 docker-compose -p $PPM_PROJECT_NAME pull --parallel
