@@ -8,7 +8,7 @@ pipeline {
     }
 
     environment {
-        PPM_TEST_STACK = '${JOB_NAME}-${BUILD_ID}'
+        PPM_TEST_STACK = '${ env.JOB_NAME }-${ env.BUILD_ID }'
         PPM_TEST_ARTIFACTS = 'artifacts'
         PPM_TEST_TEST = '${ params.test }'
     }
@@ -28,7 +28,7 @@ pipeline {
 
         stage ('Test') {
             steps {
-                sh("./test.sh ${ params.test }")
+                sh("./test.sh $PPM_TEST_TEST")
             }
         }
     }
@@ -39,8 +39,8 @@ pipeline {
             archiveArtifacts artifacts: '${PPM_TEST_ARTIFACTS}/*', fingerprint: true
 
             // Clean up Docker and stack
-            sh("docker-compose -p ${JOB_NAME}-${BUILD_ID} down -v --remove-orphans")
-            sh("docker-compose -p ${JOB_NAME}-${BUILD_ID} rm -v -f -s")
+            sh("docker-compose -p $PPM_TEST_STACK down -v --remove-orphans")
+            sh("docker-compose -p $PPM_TEST_STACK rm -v -f -s")
 
             // Purge workspace
             deleteDir()
