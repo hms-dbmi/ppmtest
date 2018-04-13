@@ -3,6 +3,7 @@
 # Check for a specific test
 export PPM_TEST_TEST="$1"
 
+
 # Get the output archive path
 OUTPUT_PATH=${PPM_TEST_OUTPUT_PATH:-"ppm-test-output.tar.gz"}
 
@@ -20,8 +21,11 @@ echo "Follow tests at: http://localhost:4444/grid/admin/live#"
 today=`date +%Y%m%d_%H%M%S`
 mkdir -p "./$today"
 
+# Determine what to call the stack
+PPM_PROJECT_NAME=${2:-$today}
+
 # Run the stack and get exit code from tests (videos not exporting)
-docker-compose up --exit-code-from test --abort-on-container-exit | tee "./$today/test-output-$today.log"
+docker-compose -p $PPM_PROJECT_NAME up --exit-code-from test --abort-on-container-exit | tee "./$today/test-output-$today.log"
 RESULT=${PIPESTATUS[0]}
 
 if [ $RESULT -ne 0 ]; then
