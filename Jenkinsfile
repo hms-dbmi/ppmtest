@@ -26,7 +26,7 @@ pipeline {
 
         stage ('Test') {
             steps {
-                sh("./test.sh ${ params.PPM_TEST_TEST } ${JOB_NAME}-${BUILD_ID}")
+                sh("./test.sh ${ params.PPM_TEST_TEST } ${JOB_NAME}-${BUILD_ID} ${ params.PPM_TEST_ARTIFACTS }")
             }
         }
     }
@@ -34,7 +34,7 @@ pipeline {
     post {
         always {
             // Collect logs and such
-            archiveArtifacts artifacts: '${PPM_TEST_ARTIFACTS}/*', fingerprint: true
+            archiveArtifacts artifacts: '${ params.PPM_TEST_ARTIFACTS }/*', fingerprint: true
 
             // Clean up Docker and stack
             sh("docker-compose -p ${JOB_NAME}-${BUILD_ID} down -v --remove-orphans")
