@@ -22,7 +22,7 @@ pipeline {
 
         stage ('Test') {
             steps {
-                sh("./test.sh ${ params.PPM_TEST_TEST }")
+                sh("./test.sh ${ params.PPM_TEST_TEST } ${JOB_NAME}-${BUILD_ID}")
             }
         }
     }
