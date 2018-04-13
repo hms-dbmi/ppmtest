@@ -24,7 +24,7 @@ mkdir -p "./$today"
 mkdir -p videos
 
 # Run the stack and get exit code from tests (videos not exporting)
-docker-compose up --exit-code-from test --abort-on-container-exit  2>&1 | tee "$today/test-output-$today.log"
+docker-compose up --exit-code-from test --abort-on-container-exit | tee "./$today/test-output-$today.log"
 RESULT=${PIPESTATUS[0]}
 
 if [ $RESULT -ne 0 ]; then
@@ -42,6 +42,17 @@ else
 
     echo "Tests succeeded!"
 
+    # Tar the output directory
+    tar czf "$OUTPUT_PATH" "$today"
+
+    # Clean up files
+    rm -rf videos
+    rm -rf "$today"
+
 fi
+
+# Clean up
+docker-compose down -v --remove-orphans
+docker-compose rm -v -f -s
 
 exit $RESULT
