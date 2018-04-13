@@ -20,9 +20,6 @@ echo "Follow tests at: http://localhost:4444/grid/admin/live#"
 today=`date +%Y%m%d_%H%M%S`
 mkdir -p "./$today"
 
-# Create a directory for collecting videos upon test failures
-mkdir -p videos
-
 # Run the stack and get exit code from tests (videos not exporting)
 docker-compose up --exit-code-from test --abort-on-container-exit | tee "./$today/test-output-$today.log"
 RESULT=${PIPESTATUS[0]}
@@ -33,7 +30,6 @@ if [ $RESULT -ne 0 ]; then
 
     # Collect files
     docker-compose logs -t > "$today/test-logs-$today.log"
-    find videos -name "*.mp4" -exec mv "{}" "$today" \;
 
     # Tar the output directory
     tar czf "$OUTPUT_PATH" "$today"
@@ -45,14 +41,6 @@ else
     # Tar the output directory
     tar czf "$OUTPUT_PATH" "$today"
 
-    # Clean up files
-    rm -rf videos
-    rm -rf "$today"
-
 fi
-
-# Clean up
-docker-compose down -v --remove-orphans
-docker-compose rm -v -f -s
 
 exit $RESULT

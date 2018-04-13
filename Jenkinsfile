@@ -26,4 +26,15 @@ pipeline {
             }
         }
     }
+
+    post {
+        always {
+            // Clean up Docker and stack
+            sh("docker-compose down -v --remove-orphans")
+            sh("docker-compose rm -v -f -s")
+
+            // Purge workspace
+            deleteDir()
+        }
+    }
 }

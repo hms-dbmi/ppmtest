@@ -307,7 +307,7 @@ services:
     tty: true
     privileged: true
     volumes:
-      - ./videos:/home/seluser/videos
+      - ppm-test-output:/home/seluser/videos
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       ppm-test:
@@ -332,7 +332,7 @@ services:
       - ./test-entrypoint.sh:/test-entrypoint.sh
       - ./tests:/tests
       - ./requirements.txt:/requirements.txt
-      - ./videos:/videos
+      - ppm-test-output:/videos
     networks:
       - ppm-test
     environment:
@@ -353,3 +353,4 @@ networks:
 
 volumes:
   ppm-test-db:
+  ppm-test-output:
