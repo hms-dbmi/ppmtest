@@ -1294,9 +1294,15 @@ class Data:
 
     def get_patient_record(self):
 
+        # Sleep
+        time.sleep(3)
+
         return self.fhir.query_patient_record(self.email_address, flatten_return=True)
 
     def get_enrollment_status(self):
+
+        # Sleep
+        time.sleep(3)
 
         return self.fhir.query_enrollment_status(self.email_address)
 
