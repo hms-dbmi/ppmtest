@@ -16,7 +16,7 @@ IMAGE="${3:-ppmtest}/$1"
 echo "Building $1 -> $IMAGE"
 
 # Build it
-#docker build -t "$IMAGE" "$2"
+docker build -t "$IMAGE" "$2"
 
 # Initialize the override file
 cat > ./docker-compose.override.yml <<EOL
