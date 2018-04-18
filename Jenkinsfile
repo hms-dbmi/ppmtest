@@ -8,9 +8,9 @@ pipeline {
     }
 
     environment {
-        PPM_TEST_STACK = '${ env.JOB_NAME }-${ env.BUILD_ID }'
-        PPM_TEST_ARTIFACTS = 'artifacts'
-        PPM_TEST_TEST = '${ params.test }'
+        PPM_TEST_STACK = "${ env.JOB_NAME }-${ env.BUILD_ID }"
+        PPM_TEST_ARTIFACTS = "artifacts"
+        PPM_TEST_TEST = "${ params.test }"
     }
 
     stages {
