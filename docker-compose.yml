@@ -258,8 +258,6 @@ services:
       - PS_PATH=secret.dbmi.ppm.fhir.DEV
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
-    ports:
-      - "9001:8008"
     healthcheck:
       test: curl --fail -s http://localhost:8080/baseDstu3/metadata || exit 1
       interval: 15s
@@ -279,8 +277,6 @@ services:
       ppm-test:
         aliases:
           - ppm-db.123456789012.us-east-1.rds.amazonaws.com
-    ports:
-      - "9002:3306"
     environment:
       MYSQL_ROOT_PASSWORD: Q9ID8!2nkljadb@n5AEW9V
       MYSQL_DATABASE: stack
@@ -299,8 +295,6 @@ services:
         aliases:
           - email-smtp.us-east-1.amazonaws.com
           - email.inbox.com
-    ports:
-      - "9003:8025"
 
   hub:
     image: "dosel/zalenium"
@@ -313,8 +307,6 @@ services:
       ppm-test:
         aliases:
           - ppm-db.123456789012.us-east-1.rds.amazonaws.com
-    ports:
-      - 4444:4444
     command: >
       start --desiredContainers 2
             --maxDockerSeleniumContainers 8
