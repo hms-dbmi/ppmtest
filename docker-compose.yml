@@ -306,7 +306,9 @@ services:
     networks:
       ppm-test:
         aliases:
-          - ppm-db.123456789012.us-east-1.rds.amazonaws.com
+          - hub.aws.dbmi.hms.harvard.edu
+    ports:
+      - 4444
     command: >
       start --desiredContainers 2
             --maxDockerSeleniumContainers 8

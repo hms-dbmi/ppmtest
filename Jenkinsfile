@@ -8,15 +8,14 @@ pipeline {
     }
 
     environment {
-        PPM_TEST_STACK = "${ env.JOB_NAME }-${ env.BUILD_ID }"
-        PPM_TEST_ARTIFACTS = "artifacts"
-        PPM_TEST_TEST = "${ params.test }"
+        COMPOSE_PROJECT_NAME = "${ env.JOB_NAME }-${ env.BUILD_ID }"
     }
 
     stages {
         stage ('Checkout') {
             steps {
-                git url: 'https://github.com/b32147/ppmtest.git'
+                // Get app code
+                checkout scm
             }
         }
 
@@ -28,19 +27,23 @@ pipeline {
 
         stage ('Test') {
             steps {
-                sh("./test.sh $PPM_TEST_TEST")
+                sh("./test.sh ${ params.test }")
             }
         }
     }
 
     post {
-        always {
-            // Collect logs and such
-            archiveArtifacts artifacts: '${PPM_TEST_ARTIFACTS}/*', fingerprint: true
 
-            // Clean up Docker and stack
-            sh("docker-compose -p $PPM_TEST_STACK down -v --remove-orphans")
-            sh("docker-compose -p $PPM_TEST_STACK rm -v -f -s")
+        always {
+
+            // Get artifacts
+            sh("./artifacts.sh")
+
+            // Collect logs and such
+            archiveArtifacts artifacts: '*.log', fingerprint: true
+
+            // Cleanup
+            sh("./cleanup.sh")
 
             // Purge workspace
             deleteDir()
