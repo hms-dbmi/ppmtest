@@ -306,7 +306,7 @@ class _User:
 
         return True
 
-    def twitter_handle(self, browser, wait_time=WAIT_TIME):
+    def twitter_handle(self, browser, handle='ppmtestuser', wait_time=WAIT_TIME):
 
         # Go to the dashboard.
         self.go_to_dashboard(browser)
@@ -322,7 +322,7 @@ class _User:
             return False
 
         # Use the email address, sans domain.
-        browser.fill('twitter_handle', self.email_address.split('-')[2][:8])
+        browser.fill('twitter_handle', handle)
 
         # Check for the submit button.
         if not browser.make_element_visible_by_partial_classname('btn btn-primary', wait_time):
