@@ -42,7 +42,7 @@ pipeline {
 
             // Get artifacts
             sh("mkdir artifacts")
-            sh("./artifacts.sh $(pwd)/artifacts  || exit 0")
+            sh("./artifacts.sh ${ env.WORKSPACE }/artifacts  || exit 0")
 
             dir('artifacts') {
                 archiveArtifacts artifacts: '*', fingerprint: true
