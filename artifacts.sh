@@ -16,4 +16,4 @@ HUB="$(docker-compose ps -q hub)"
 VOLUME=$(docker inspect --format '{{ range .Mounts }}{{ if eq .Destination "/home/seluser/videos" }}{{ .Name }}{{ end }}{{ end }}' $HUB)
 
 # Copy the videos
-docker run --rm -v "$1":/artifacts -v "$VOLUME":/videos busybox sh -c 'if test -n "$(find /videos -maxdepth 1 -name '*.mp4' -print -quit)"; then cp /videos/*.mp4 /artifacts/ && chmod 777 /artifacts/*; fi'
+docker run --rm -v "$1":/artifacts -v "$VOLUME":/videos busybox sh -c 'if test -n "$(find /videos -maxdepth 1 -name '*.mp4' -print)"; then cp /videos/*.mp4 /artifacts/ && chmod 777 /artifacts/*; fi'
