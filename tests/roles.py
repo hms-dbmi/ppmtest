@@ -14,7 +14,7 @@ import logging
 logger = logging.getLogger('ppm-test-suite')
 
 # Set a default wait time in seconds
-WAIT_TIME = 3
+WAIT_TIME = 10
 
 
 class _User:
