@@ -41,9 +41,12 @@ pipeline {
         always {
 
             // Get artifacts
-            sh("./artifacts.sh ${ env.WORKSPACE }/artifacts  || exit 0")
-            archiveArtifacts artifacts: 'artifacts/*', fingerprint: true
+            sh("mkdir artifacts")
+            sh("./artifacts.sh $(pwd)/artifacts  || exit 0")
 
+            dir('artifacts') {
+                archiveArtifacts artifacts: '*', fingerprint: true
+            }
 
             // Cleanup
             sh("./cleanup.sh")
