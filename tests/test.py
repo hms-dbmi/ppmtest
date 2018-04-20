@@ -77,17 +77,9 @@ class PPMTestCase(unittest.TestCase):
 
         # Create the browser
         browser = Browser(browser_name, url=self.urls['selenium'])
-        admin_browser = Browser(browser_name, url=self.urls['selenium'])
 
         # Make sure browsers are released
-        self.addCleanup(self.cleanupBrowsers, [browser, admin_browser])
-
-        # Create an admin user.
-        admin = roles.Administrator(self.urls,
-                                    email_address=self.accounts['admin']['email'],
-                                    password=self.accounts['admin']['password'])
-
-        admin.log_in_to_p2m2_admin(admin_browser)
+        self.addCleanup(self.cleanupBrowsers, [browser])
 
         # Create an email inbox.
         email = roles.Email(url=self.urls['inbox'])
@@ -148,6 +140,20 @@ class PPMTestCase(unittest.TestCase):
         self.assertIn('participants/{}'.format(fhir_id), admin_link,
                       msg='Link in admin notification email is not correct: {}'.format(admin_link))
 
+        # Create the admin browser
+        admin_browser = Browser(browser_name, url=self.urls['selenium'])
+
+        # Make sure browsers are released
+        self.addCleanup(self.cleanupBrowsers, [admin_browser])
+
+        # Create an admin user.
+        admin = roles.Administrator(self.urls,
+                                    email_address=self.accounts['admin']['email'],
+                                    password=self.accounts['admin']['password'])
+
+        # Login in
+        admin.log_in_to_p2m2_admin(admin_browser)
+
         # Approve them.
         admin.approve_user(admin_browser, fhir_id)
 
@@ -185,17 +191,9 @@ class PPMTestCase(unittest.TestCase):
 
         # Create the browser
         browser = Browser(browser_name, url=self.urls['selenium'])
-        admin_browser = Browser(browser_name, url=self.urls['selenium'])
 
         # Make sure browsers are released
-        self.addCleanup(self.cleanupBrowsers, [browser, admin_browser])
-
-        # Create an admin user.
-        admin = roles.Administrator(self.urls,
-                                    email_address=self.accounts['admin']['email'],
-                                    password=self.accounts['admin']['password'])
-
-        admin.log_in_to_p2m2_admin(admin_browser)
+        self.addCleanup(self.cleanupBrowsers, [browser])
 
         # Create an email inbox.
         email = roles.Email(url=self.urls['inbox'])
@@ -250,6 +248,20 @@ class PPMTestCase(unittest.TestCase):
         admin_link = admin.get_signup_notification_link(browser, email)
         self.assertIn('participants/{}'.format(fhir_id), admin_link,
                       msg='Link in admin notification email is not correct: {}'.format(admin_link))
+
+        # Create the admin browser
+        admin_browser = Browser(browser_name, url=self.urls['selenium'])
+
+        # Make sure browsers are released
+        self.addCleanup(self.cleanupBrowsers, [admin_browser])
+
+        # Create an admin user.
+        admin = roles.Administrator(self.urls,
+                                    email_address=self.accounts['admin']['email'],
+                                    password=self.accounts['admin']['password'])
+
+        # Login in
+        admin.log_in_to_p2m2_admin(admin_browser)
 
         # Approve them.
         admin.approve_user(admin_browser, fhir_id)
