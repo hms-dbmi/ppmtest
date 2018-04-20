@@ -93,11 +93,15 @@ class PPMTestCase(unittest.TestCase):
         email = roles.Email(url=self.urls['inbox'])
 
         # Create the entities.
-        user = roles.AutismUser(self.urls, independent=independent)
+        user_key = 'asd-independent' if independent else 'asd-dependent'
+        user = roles.AutismUser(self.urls,
+                                email_address=self.accounts[user_key]['email'],
+                                password=self.accounts[user_key]['password'],
+                                independent=independent)
 
         # Sign up.
-        signed_up = user.sign_up_to_p2m2(browser)
-        self.assertTrue(signed_up, msg='Patient could not sign in')
+        signed_up = user.log_in_to_p2m2(browser)
+        self.assertTrue(signed_up, msg='Patient could not log in')
 
         # Verify email.
         user.verify_email(browser, email)
@@ -197,11 +201,13 @@ class PPMTestCase(unittest.TestCase):
         email = roles.Email(url=self.urls['inbox'])
 
         # Create the entities.
-        user = roles.NEERUser(self.urls)
+        user = roles.NEERUser(self.urls,
+                              email_address=self.accounts['neer']['email'],
+                              password=self.accounts['neer']['password'])
 
         # Sign up.
-        signed_up = user.sign_up_to_p2m2(browser)
-        self.assertTrue(signed_up, msg='Patient could not sign in')
+        signed_up = user.log_in_to_p2m2(browser)
+        self.assertTrue(signed_up, msg='Patient could not log in')
 
         # Verify email.
         user.verify_email(browser, email)
