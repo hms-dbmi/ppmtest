@@ -37,10 +37,9 @@ pipeline {
         always {
 
             // Get artifacts
-            sh("./artifacts.sh")
+            sh("./artifacts.sh ${ env.WORKSPACE }/artifacts")
+            archiveArtifacts artifacts: 'artifacts/*', fingerprint: true
 
-            // Collect logs and such
-            archiveArtifacts artifacts: '*.log', fingerprint: true
 
             // Cleanup
             sh("./cleanup.sh")
