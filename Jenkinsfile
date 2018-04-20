@@ -1,5 +1,10 @@
 pipeline {
     agent any
+    options {
+        disableConcurrentBuilds()
+        timestamps()
+    }
+
     parameters {
         text(
             defaultValue: 'test.PPMTestCase.test_neer_firefox',
@@ -37,7 +42,7 @@ pipeline {
         always {
 
             // Get artifacts
-            sh("./artifacts.sh ${ env.WORKSPACE }/artifacts")
+            sh("./artifacts.sh ${ env.WORKSPACE }/artifacts  || exit 0")
             archiveArtifacts artifacts: 'artifacts/*', fingerprint: true
 
 
