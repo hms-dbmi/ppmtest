@@ -77,17 +77,9 @@ class PPMTestCase(unittest.TestCase):
 
         # Create the browser
         browser = Browser(browser_name, url=self.urls['selenium'])
-        admin_browser = Browser(browser_name, url=self.urls['selenium'])
 
         # Make sure browsers are released
-        self.addCleanup(self.cleanupBrowsers, [browser, admin_browser])
-
-        # Create an admin user.
-        admin = roles.Administrator(self.urls,
-                                    email_address=self.accounts['admin']['email'],
-                                    password=self.accounts['admin']['password'])
-
-        admin.log_in_to_p2m2_admin(admin_browser)
+        self.addCleanup(self.cleanupBrowsers, [browser])
 
         # Create an email inbox.
         email = roles.Email(url=self.urls['inbox'])
@@ -120,9 +112,6 @@ class PPMTestCase(unittest.TestCase):
         # Get their ID
         fhir_id = record['fhir_id']
 
-        # Ensure the user gets cleaned up
-        self.addCleanup(admin.delete_user, admin_browser, fhir_id)
-
         # Check enrollment status.
         status = user.data.get_enrollment_status()
         self.assertEqual('registered', status,
@@ -142,6 +131,23 @@ class PPMTestCase(unittest.TestCase):
                             ['Massachusetts General Hospital',
                              'Beth Isreal Deaconess Medical Center',
                              'Brigham and Women\'s Hospital'])
+
+        # Create the admin browser
+        admin_browser = Browser(browser_name, url=self.urls['selenium'])
+
+        # Make sure browsers are released
+        self.addCleanup(self.cleanupBrowsers, [admin_browser])
+
+        # Create an admin user.
+        admin = roles.Administrator(self.urls,
+                                    email_address=self.accounts['admin']['email'],
+                                    password=self.accounts['admin']['password'])
+
+        # Ensure the user gets cleaned up
+        self.addCleanup(admin.delete_user, admin_browser, fhir_id)
+
+        # Login in
+        admin.log_in_to_p2m2_admin(admin_browser)
 
         # Ensure the admin received an email with the approval link.
         admin_link = admin.get_signup_notification_link(browser, email)
@@ -185,17 +191,9 @@ class PPMTestCase(unittest.TestCase):
 
         # Create the browser
         browser = Browser(browser_name, url=self.urls['selenium'])
-        admin_browser = Browser(browser_name, url=self.urls['selenium'])
 
         # Make sure browsers are released
-        self.addCleanup(self.cleanupBrowsers, [browser, admin_browser])
-
-        # Create an admin user.
-        admin = roles.Administrator(self.urls,
-                                    email_address=self.accounts['admin']['email'],
-                                    password=self.accounts['admin']['password'])
-
-        admin.log_in_to_p2m2_admin(admin_browser)
+        self.addCleanup(self.cleanupBrowsers, [browser])
 
         # Create an email inbox.
         email = roles.Email(url=self.urls['inbox'])
@@ -226,9 +224,6 @@ class PPMTestCase(unittest.TestCase):
         # Get their ID
         fhir_id = record['fhir_id']
 
-        # Ensure the user gets cleaned up
-        self.addCleanup(admin.delete_user, admin_browser, fhir_id)
-
         # Check enrollment status.
         status = user.data.get_enrollment_status()
         self.assertEqual('registered', status,
@@ -245,6 +240,23 @@ class PPMTestCase(unittest.TestCase):
 
         # Do the questionnaire.
         user.questionnaire(browser)
+
+        # Create the admin browser
+        admin_browser = Browser(browser_name, url=self.urls['selenium'])
+
+        # Make sure browsers are released
+        self.addCleanup(self.cleanupBrowsers, [admin_browser])
+
+        # Create an admin user.
+        admin = roles.Administrator(self.urls,
+                                    email_address=self.accounts['admin']['email'],
+                                    password=self.accounts['admin']['password'])
+
+        # Ensure the user gets cleaned up
+        self.addCleanup(admin.delete_user, admin_browser, fhir_id)
+
+        # Login in
+        admin.log_in_to_p2m2_admin(admin_browser)
 
         # Ensure the admin received an email with the approval link.
         admin_link = admin.get_signup_notification_link(browser, email)

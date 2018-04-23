@@ -7,17 +7,13 @@ pip install -r /requirements.txt
 nose2 -s /tests $PPM_TEST_TEST
 RESULT=$?
 
-if [ $RESULT -ne 0 ]; then
+# Figure out a better way to ensure videos were exported
+while [ ! -f /videos/*.mp4 ]; do
+    echo "Waiting on video..."
+    sleep 3
+done
 
-    # Figure out a better way to ensure videos were exported
-    while [ ! -f /videos/*.mp4 ]; do
-        echo "Waiting on video..."
-        sleep 3
-    done
-
-    # Give them time to save
-    sleep 5
-
-fi
+# Give them time to save
+sleep 10
 
 exit $RESULT

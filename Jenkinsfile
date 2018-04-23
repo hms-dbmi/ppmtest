@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    options {
+        disableConcurrentBuilds()
+    }
+
     parameters {
         text(
             defaultValue: 'test.PPMTestCase.test_neer_firefox',
@@ -37,10 +41,12 @@ pipeline {
         always {
 
             // Get artifacts
-            sh("./artifacts.sh")
+            sh("mkdir artifacts")
+            sh("./artifacts.sh ${ env.WORKSPACE }/artifacts  || exit 0")
 
-            // Collect logs and such
-            archiveArtifacts artifacts: '*.log', fingerprint: true
+            dir('artifacts') {
+                archiveArtifacts artifacts: '*', fingerprint: true
+            }
 
             // Cleanup
             sh("./cleanup.sh")
