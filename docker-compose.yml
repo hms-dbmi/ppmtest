@@ -1,70 +1,29 @@
 version: '2.1'
 services:
-  p2m2:
-    image: 685606823951.dkr.ecr.us-east-1.amazonaws.com/p2m2:development
-    volumes:
-      - ./gunicorn-nginx-entry.override.sh:/entry_scripts/gunicorn-nginx-entry.override.sh
-    entrypoint: ["/entry_scripts/gunicorn-nginx-entry.override.sh", "p2m2", "/entry_scripts/gunicorn-nginx-entry.sh"]
-    networks:
-      ppm-test:
-        aliases:
-          - p2m2.aws.dbmi-dev.hms.harvard.edu
-    environment:
-      - APP_PORT=8010
-      - PS_PATH=secret.dbmi.ppm.p2m2.DEV
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
-    healthcheck:
-      test: curl --fail -s https://p2m2.aws.dbmi-dev.hms.harvard.edu?project=neer || exit 1
-      interval: 15s
-      timeout: 5s
-      retries: 15
-    depends_on:
-      p2m2-admin:
-        condition: service_healthy
-      scireg:
-        condition: service_healthy
-      sciauth:
-        condition: service_healthy
-      fhir:
-        condition: service_healthy
-      proxy:
-        condition: service_healthy
-      consent:
-        condition: service_healthy
-      consent-neer:
-        condition: service_healthy
-      questionnaire:
-        condition: service_healthy
-      questionnaire-neer:
-        condition: service_healthy
-      mail:
-        condition: service_started
-      hub:
-        condition: service_started
 
-  p2m2-admin:
-    image: 685606823951.dkr.ecr.us-east-1.amazonaws.com/p2m2-admin:development
+  hypatio:
     volumes:
       - ./gunicorn-nginx-entry.override.sh:/entry_scripts/gunicorn-nginx-entry.override.sh
+    entrypoint: ["/entry_scripts/gunicorn-nginx-entry.override.sh", "scireg", "/entry_scripts/gunicorn-nginx-entry.sh"]
     networks:
       ppm-test:
         aliases:
-          - p2m2a.aws.dbmi-dev.hms.harvard.edu
+          - portal.aws.dbmi-dev.hms.harvard.edu
     environment:
-      - APP_PORT=8011
-      - PS_PATH=secret.dbmi.ppm.p2m2-admin.DEV
+      - APP_PORT=80
+      - PS_PATH=secret.dbmi.hypatio.DEV
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
     healthcheck:
-      test: curl --fail -s https://p2m2a.aws.dbmi-dev.hms.harvard.edu:8011 || exit 1
+      test: curl --fail -s https://portal.aws.dbmi-dev.hms.harvard.edu:8005 || exit 1
       interval: 15s
       timeout: 5s
       retries: 15
-    entrypoint: ["/entry_scripts/gunicorn-nginx-entry.override.sh", "p2m2-admin", "/entry_scripts/gunicorn-nginx-entry.sh"]
     depends_on:
-      fhir:
-        condition: service_healthy
+      scireg:
+        condition: service_started
+      sciauth:
+        condition: service_started
 
   scireg:
     image: 685606823951.dkr.ecr.us-east-1.amazonaws.com/scireg:dev
@@ -85,9 +44,6 @@ services:
       interval: 15s
       timeout: 5s
       retries: 15
-    depends_on:
-      fhir:
-        condition: service_healthy
 
   sciauth:
     image: 685606823951.dkr.ecr.us-east-1.amazonaws.com/sciauth:dev
@@ -108,165 +64,14 @@ services:
       interval: 15s
       timeout: 5s
       retries: 15
-    depends_on:
-      fhir:
-        condition: service_healthy
 
-  proxy:
-    image: 685606823951.dkr.ecr.us-east-1.amazonaws.com/proxy:development
-    volumes:
-      - ./gunicorn-nginx-entry.override.sh:/entry_scripts/gunicorn-nginx-entry.override.sh
-    entrypoint: ["/entry_scripts/gunicorn-nginx-entry.override.sh", "proxy", "/entry_scripts/gunicorn-nginx-entry.sh"]
+  mail:
+    image: mailhog/mailhog
     networks:
       ppm-test:
         aliases:
-          - smart.aws.dbmi-dev.hms.harvard.edu
-    environment:
-      - APP_PORT=8005
-      - PS_PATH=secret.dbmi.ppm.smart.proxy.DEV
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
-    healthcheck:
-      test: curl --fail -s https://smart.aws.dbmi-dev.hms.harvard.edu:8005 || exit 1
-      interval: 15s
-      timeout: 5s
-      retries: 15
-    depends_on:
-      fhir:
-        condition: service_healthy
-      stackdb:
-        condition: service_healthy
-
-  consent:
-    image: 685606823951.dkr.ecr.us-east-1.amazonaws.com/consent-app:development
-    volumes:
-      - ./gunicorn-nginx-entry.override.sh:/entry_scripts/gunicorn-nginx-entry.override.sh
-    entrypoint: ["/entry_scripts/gunicorn-nginx-entry.override.sh", "consent", "/entry_scripts/gunicorn-nginx-entry.sh"]
-    networks:
-      ppm-test:
-        aliases:
-          - consent.aws.dbmi-dev.hms.harvard.edu
-    environment:
-      - APP_PORT=8003
-      - PS_PATH=secret.dbmi.ppm.smart.consent.DEV
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
-    healthcheck:
-      test: curl --fail -s http://consent.aws.dbmi-dev.hms.harvard.edu:8003 || exit 1
-      interval: 15s
-      timeout: 5s
-      retries: 15
-    depends_on:
-      proxy:
-        condition: service_healthy
-      fhir:
-        condition: service_healthy
-
-  consent-neer:
-    image: 685606823951.dkr.ecr.us-east-1.amazonaws.com/consent-app:development
-    volumes:
-      - ./gunicorn-nginx-entry.override.sh:/entry_scripts/gunicorn-nginx-entry.override.sh
-    entrypoint: ["/entry_scripts/gunicorn-nginx-entry.override.sh", "consent-neer", "/entry_scripts/gunicorn-nginx-entry.sh"]
-    networks:
-      ppm-test:
-        aliases:
-          - consent-neer.aws.dbmi-dev.hms.harvard.edu
-    environment:
-      - APP_PORT=8009
-      - PS_PATH=secret.dbmi.ppm.smart.consent-neer.DEV
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
-    healthcheck:
-      test: curl --fail -s http://consent-neer.aws.dbmi-dev.hms.harvard.edu:8009 || exit 1
-      interval: 15s
-      timeout: 5s
-      retries: 15
-    depends_on:
-      proxy:
-        condition: service_healthy
-      fhir:
-        condition: service_healthy
-      consent:
-        condition: service_healthy
-
-  questionnaire:
-    image: 685606823951.dkr.ecr.us-east-1.amazonaws.com/questionnaire-app:development
-    volumes:
-      - ./gunicorn-nginx-entry.override.sh:/entry_scripts/gunicorn-nginx-entry.override.sh
-    entrypoint: ["/entry_scripts/gunicorn-nginx-entry.override.sh", "questionnaire", "/entry_scripts/gunicorn-nginx-entry.sh"]
-    networks:
-      ppm-test:
-        aliases:
-          - questionnaire.aws.dbmi-dev.hms.harvard.edu
-    environment:
-      - APP_PORT=8001
-      - PS_PATH=secret.dbmi.ppm.smart.questionnaire.DEV
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
-      - PROJECT=asd
-    healthcheck:
-      test: curl --fail -s http://questionnaire.aws.dbmi-dev.hms.harvard.edu:8001 || exit 1
-      interval: 15s
-      timeout: 5s
-      retries: 15
-    depends_on:
-      proxy:
-        condition: service_healthy
-      fhir:
-        condition: service_healthy
-      consent-neer:
-        condition: service_healthy
-
-  questionnaire-neer:
-    image: 685606823951.dkr.ecr.us-east-1.amazonaws.com/questionnaire-app:development
-    volumes:
-      - ./gunicorn-nginx-entry.override.sh:/entry_scripts/gunicorn-nginx-entry.override.sh
-    entrypoint: ["/entry_scripts/gunicorn-nginx-entry.override.sh", "questionnaire-neer", "/entry_scripts/gunicorn-nginx-entry.sh"]
-    networks:
-      ppm-test:
-        aliases:
-          - questionnaire-neer.aws.dbmi-dev.hms.harvard.edu
-    environment:
-      - APP_PORT=8007
-      - PS_PATH=secret.dbmi.ppm.smart.questionnaire-neer.DEV
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
-      - PROJECT=neer
-    healthcheck:
-      test: curl --fail -s http://questionnaire-neer.aws.dbmi-dev.hms.harvard.edu:8007 || exit 1
-      interval: 15s
-      timeout: 5s
-      retries: 15
-    depends_on:
-      proxy:
-        condition: service_healthy
-      fhir:
-        condition: service_healthy
-      questionnaire:
-        condition: service_healthy
-
-  fhir:
-    image: 685606823951.dkr.ecr.us-east-1.amazonaws.com/fhir:development
-    volumes:
-      - ./gunicorn-nginx-entry.override.sh:/gunicorn-nginx-entry.override.sh
-    networks:
-      ppm-test:
-        aliases:
-          - ppm-test-fhir.aws.dbmi.hms.harvard.edu
-    environment:
-      - APP_PORT=8008
-      - PS_PATH=secret.dbmi.ppm.fhir.DEV
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
-    healthcheck:
-      test: curl --fail -s http://localhost:8080/baseDstu3/metadata || exit 1
-      interval: 15s
-      timeout: 5s
-      retries: 15
-    entrypoint: ["/gunicorn-nginx-entry.override.sh", "fhir", "/gunicorn-nginx-entry.sh"]
-    depends_on:
-      stackdb:
-        condition: service_healthy
+          - email-smtp.us-east-1.amazonaws.com
+          - email.inbox.com
 
   stackdb:
     image: mysql:5.7
@@ -288,14 +93,6 @@ services:
       timeout: 5s
       retries: 15
 
-  mail:
-    image: mailhog/mailhog
-    networks:
-      ppm-test:
-        aliases:
-          - email-smtp.us-east-1.amazonaws.com
-          - email.inbox.com
-
   hub:
     image: "dosel/zalenium"
     tty: true
@@ -308,7 +105,7 @@ services:
         aliases:
           - hub.aws.dbmi.hms.harvard.edu
     ports:
-      - 4444
+      - "4444:4444"
     command: >
       start --desiredContainers 2
             --maxDockerSeleniumContainers 8
@@ -334,8 +131,8 @@ services:
       - PPM_TEST_ENVIRONMENT=docker
     entrypoint: /test-entrypoint.sh
     depends_on:
-      p2m2:
-        condition: service_healthy
+      hypatio:
+        condition: service_started
       hub:
         condition: service_started
       mail:
