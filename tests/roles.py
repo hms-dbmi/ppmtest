@@ -257,6 +257,11 @@ class _User:
         # Go to the dashboard.
         self.go_to_dashboard(browser)
 
+        # Go to the box
+        if not browser.make_element_visible_by_xpath('//*[@id="panel-content-poc"]', index=0, wait_time=wait_time):
+            logger.error('Could not find the points of care box')
+            return False
+
         if browser.is_element_present_by_partial_text('You have entered your points of care.', wait_time):
             logger.debug('This user has already entered their points of care')
             return True
@@ -309,6 +314,11 @@ class _User:
 
         # Go to the dashboard.
         self.go_to_dashboard(browser)
+
+        # Go to the box
+        if not browser.make_element_visible_by_xpath('//*[@id="panel-content-research_study"]', index=0, wait_time=wait_time):
+            logger.error('Could not find the research studies box')
+            return False
 
         if browser.is_element_present_by_partial_text('You have entered your clinical trials.', wait_time):
             logger.debug('This user has already entered their research studies')
@@ -363,6 +373,11 @@ class _User:
         # Go to the dashboard.
         self.go_to_dashboard(browser)
 
+        # Go to the box
+        if not browser.make_element_visible_by_xpath('//*[@id="panel-content-twitter"]', index=0, wait_time=wait_time):
+            logger.error('Could not find the Twitter box')
+            return False
+
         # Check if already surveyed.
         if browser.is_element_present_by_partial_text('Your Twitter handle has been', wait_time):
             logger.debug('This user has already entered their Twitter handle')
@@ -395,6 +410,11 @@ class _User:
 
         # Go to the dashboard.
         self.go_to_dashboard(browser)
+
+        # Go to the box
+        if not browser.make_element_visible_by_xpath('//*[@id="panel-content-facebook"]', index=0, wait_time=wait_time):
+            logger.error('Could not find the Facebook box')
+            return False
 
         # Check if already connected.
         if browser.is_element_present_by_partial_text('Your Facebook has been', wait_time):
@@ -430,6 +450,54 @@ class _User:
             logger.error('Dashboard does not show as Facebook as having been connected')
             return False
 
+        return True
+
+    def fitbit(self, browser, email_address, password, wait_time=WAIT_TIME):
+
+        # Go to the dashboard.
+        self.go_to_dashboard(browser)
+
+        # Go to the box
+        if not browser.make_element_visible_by_xpath('//*[@id="panel-content-fitbit"]', index=0, wait_time=wait_time):
+            logger.error('Could not find the FitBit box')
+            return False
+
+        # TODO: Finish this!
+        '''
+        # Check if already connected.
+        if browser.is_element_present_by_partial_text('Your Fitbit has been', wait_time):
+            logger.debug('This user has already connected their Fitbit')
+            return True
+
+        # Check for the Facebook link.
+        if not browser.make_element_visible_by_text('Click here to link your public Facebook data.', wait_time):
+            logger.error('The Facebook link could not be found')
+            return False
+
+        # Follow the link
+        browser.click_link_by_text('Click here to link your public Facebook data.')
+
+        # Wait for the page to load
+        if not browser.make_element_visible_by_text('Log into Facebook', wait_time):
+            logger.error('The Facebook sign-in page could not load')
+            return False
+
+        # Continue.
+        browser.fill_form({
+            'email': email_address,
+            'pass': password,
+        })
+
+        browser.find_by_id('loginbutton').first.click()
+
+        # Wait for the permissions page to load
+        # TODO: Implement this if using a fresh Facebook account, otherwise assume permissions already granted
+
+        # Check the results.
+        if not browser.is_element_present_by_partial_text('Your public Facebook data has been linked', wait_time):
+            logger.error('Dashboard does not show as Facebook as having been connected')
+            return False
+        '''
         return True
 
     def get_confirmation_link(self, browser, email, wait_time=WAIT_TIME):
