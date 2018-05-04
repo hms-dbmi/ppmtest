@@ -262,22 +262,21 @@ class _User:
             return True
 
         # Check for the points of care form.
-        # TODO: Use a more specific selector for the POC form
-        if not browser.make_element_visible_by_tag('form', wait_time):
+        if not browser.make_element_visible_by_xpath('//*[@id="panel-content-poc"]/div/form', index=0, wait_time=wait_time):
             logger.error('Could not find the point of care form')
             return False
 
         # Get the form.
-        form = browser.find_by_tag('form').first
+        form = browser.find_by_xpath('//*[@id="panel-content-poc"]/div/form').first
 
         # Iterate through the passed points of care.
         for index, point_of_care in enumerate(points_of_care):
 
             # Get the first input field.
-            div = form.find_by_id('sortable-form').last
+            div = form.find_by_id('sortable-point-of-care').last
 
             # Set the name of the input.
-            point_of_care_input = 'form-{}-location'.format(index)
+            point_of_care_input = 'point-of-care-{}-location'.format(index)
 
             # Check for the point of care input.
             if not browser.is_element_visible_by_name(point_of_care_input, wait_time):
@@ -302,6 +301,59 @@ class _User:
         # Check the results.
         if not browser.is_element_present_by_partial_text('You have entered your points of care.', wait_time):
             logger.error('Dashboard does not show that points of care have been submitted')
+            return False
+
+        return True
+
+    def research_studies(self, browser, research_studies=[], wait_time=WAIT_TIME):
+
+        # Go to the dashboard.
+        self.go_to_dashboard(browser)
+
+        if browser.is_element_present_by_partial_text('You have entered your clinical trials.', wait_time):
+            logger.debug('This user has already entered their research studies')
+            return True
+
+        # Check for the points of care form.
+        if not browser.make_element_visible_by_xpath('//*[@id="panel-content-research_study"]/div/form', index=0, wait_time=wait_time):
+            logger.error('Could not find the research study form')
+            return False
+
+        # Get the form.
+        form = browser.find_by_xpath('//*[@id="panel-content-research_study"]/div/form').first
+
+        # Iterate through the passed points of care.
+        for index, research_study in enumerate(research_studies):
+
+            # Get the first input field.
+            div = form.find_by_id('sortable-research-study').last
+
+            # Set the name of the input.
+            research_study_input = 'research-study-{}-title'.format(index)
+
+            # Check for the point of care input.
+            if not browser.is_element_visible_by_name(research_study_input, wait_time):
+                logger.error('Research study input "{}" could not be found'.format(index))
+                return False
+
+            # Add a point of care.
+            browser.fill(research_study_input, research_study)
+
+            # Add another point of care form field if more points of care need entered.
+            if index < len(research_studies) - 1:
+                div.find_by_tag('button')[1].click()
+
+        # Check for the submit button.
+        if not browser.make_element_visible_by_partial_classname('btn btn-primary', wait_time):
+            logger.error('The Research study "Submit" button could not be found')
+            return False
+
+        # Continue.
+        browser.find_by_css('.btn.btn-primary').first.click()
+
+        # Check the results.
+        if not browser.is_element_present_by_partial_text('You have entered your clinical trials.', wait_time):
+            logger.error('Dashboard does not show that research studies have been submitted')
             return False
 
         return True

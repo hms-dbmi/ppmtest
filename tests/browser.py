@@ -207,21 +207,36 @@ class RemoteFirefox(SplinterRemoteDriver, BrowserExtensions):
 
     def __init__(self, url=None):
 
-        super(RemoteFirefox, self).__init__(url=url, browser='firefox', wait_time=5)
+        # Set a longer timeout
+        capabilities = {
+            "idleTimeout": 300
+        }
+
+        super(RemoteFirefox, self).__init__(url=url, browser='firefox', wait_time=5, **capabilities)
 
 
 class RemoteChrome(SplinterRemoteDriver, BrowserExtensions):
 
     def __init__(self, url=None):
 
-        super(RemoteChrome, self).__init__(url=url, browser='chrome', wait_time=5)
+        # Set a longer timeout
+        capabilities = {
+            "idleTimeout": 300
+        }
+
+        super(RemoteChrome, self).__init__(url=url, browser='chrome', wait_time=5, **capabilities)
 
 
 class RemoteInternetExplorer(SplinterRemoteDriver, BrowserExtensions):
 
     def __init__(self, url=None):
 
-        super(RemoteInternetExplorer, self).__init__(url=url, browser='internetexplorer', wait_time=5)
+        # Set a longer timeout
+        capabilities = {
+            "idleTimeout": 300
+        }
+
+        super(RemoteInternetExplorer, self).__init__(url=url, browser='internetexplorer', wait_time=5, **capabilities)
 
 
 class Chrome(ChromeDriver, BrowserExtensions):

@@ -1,4 +1,5 @@
 accounts:
+
   docker:
     admin:
       email: admin@ppm.com
@@ -23,31 +24,8 @@ accounts:
     fitbit:
       email: qpovtabbjz_1522326124@tfbnw.net
       password: ppmisgreat
+
   local:
-    admin:
-      email: admin@ppm.com
-      password: PPMIsGreat!
-
-    neer:
-      email: neer-test-user@ppm.com
-      password: PPMIsGreat!
-
-    asd-dependent:
-      email: asd-dependent-test-user@ppm.com
-      password: PPMIsGreat!
-
-    asd-independent:
-      email: asd-independent-test-user@ppm.com
-      password: PPMIsGreat!
-
-    facebook:
-      email: qpovtabbjz_1522326124@tfbnw.net
-      password: ppmisgreat
-
-    fitbit:
-      email: qpovtabbjz_1522326124@tfbnw.net
-      password: ppmisgreat
-  ppm:
     admin:
       email: admin@ppm.com
       password: PPMIsGreat!

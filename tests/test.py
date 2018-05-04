@@ -284,6 +284,11 @@ class PPMTestCase(unittest.TestCase):
                              'Beth Isreal Deaconess Medical Center',
                              'Brigham and Women\'s Hospital'])
 
+        # Fill in research studies.
+        user.research_studies(browser,
+                            ['Research Study #1, Dr. Jenkins, Drugonopin',
+                             'Research Study 2, Genentech, Avastin'])
+
         # Do Twitter.
         user.twitter_handle(browser)
 
